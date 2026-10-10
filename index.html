@@ -4932,18 +4932,59 @@
                 height: 440px;
             }
 
-            /* ===== 聊天框手机端：做成独立Tab内容 ===== */
+            /* ===== 聊天框手机端：独立Tab，全屏完整显示 ===== */
             .chat-card {
                 position: relative !important;
                 width: 100% !important;
                 max-width: 100% !important;
                 max-height: none !important;
+                height: calc(100vh - 140px);
                 min-height: 500px;
                 transform: none !important;
                 opacity: 1 !important;
                 pointer-events: auto !important;
                 border-radius: 16px;
                 box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+            }
+
+            /* 聊天框顶部小把手去掉（Tab模式不需要） */
+            .chat-card::before {
+                display: none;
+            }
+
+            /* 聊天消息区撑满剩余空间，可滚动 */
+            .chat-messages {
+                flex: 1;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                max-height: none !important;
+                min-height: 0;
+            }
+
+            /* 聊天建议按钮区固定 */
+            .chat-suggestions {
+                flex-shrink: 0;
+            }
+
+            /* 聊天输入区固定在底部 */
+            .chat-input-area {
+                flex-shrink: 0;
+            }
+
+            /* 聊天气泡对称优化 */
+            .message.bot .bubble {
+                border-top-left-radius: 14px;
+            }
+            .message.user .bubble {
+                border-top-right-radius: 14px;
+            }
+
+            /* 关闭按钮在Tab模式下隐藏 */
+            .chat-close {
+                display: none !important;
             }
 
             /* ===== 机器人手机端隐藏 ===== */
@@ -4962,6 +5003,7 @@
                 flex-wrap: nowrap !important;
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
+                width: 100%;
             }
             .top-nav-links {
                 gap: 14px;
@@ -4971,6 +5013,8 @@
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
                 scrollbar-width: none;
+                flex: 1;
+                min-width: 0;
             }
             .top-nav-links::-webkit-scrollbar {
                 display: none;
@@ -4978,6 +5022,8 @@
             .top-nav-links a {
                 flex-shrink: 0;
                 font-size: 13px;
+                white-space: nowrap;
+                display: inline-block;
             }
             .top-nav-brand {
                 display: none;
@@ -5176,48 +5222,6 @@
     <div class="layout">
         <!-- 内容 -->
         <div class="page">
-        <!-- 聊天框（手机App风格，点机器人弹出） -->
-        <div class="chat-card" id="chatCard">
-            <div class="chat-header">
-                <button class="chat-close" id="chatClose" title="收起">×</button>
-                <div class="header-avatar">
-                        <div class="peek-hair-sm">
-                            <div class="peek-ahoge-sm"></div>
-                        </div>
-                        <div class="peek-eye-sm left"></div>
-                        <div class="peek-eye-sm right"></div>
-                        <div class="peek-blush-sm left"></div>
-                        <div class="peek-blush-sm right"></div>
-                        <div class="peek-mouth-sm"></div>
-                    </div>
-                    <div class="chat-header-text">
-                        <h2>数字分身 Digital Twin</h2>
-                        <p>和尧嵘才聊聊</p>
-                    </div>
-                    <span class="status-dot">在线</span>
-                </div>
-                <div class="chat-messages" id="chatMessages">
-                    <div class="message bot">
-                        <div class="msg-avatar">尧</div>
-                        <div class="bubble">你好，我是尧嵘才的数字分身。可以问我关于我的研究方向、项目经历或兴趣爱好，有什么想了解的吗？</div>
-                    </div>
-                </div>
-                <div class="chat-divider"><span>试试问我</span></div>
-                <div class="chat-suggestions">
-                    <button class="suggestion-btn" onclick="askQuestion('你是谁？')">你是谁？</button>
-                    <button class="suggestion-btn" onclick="askQuestion('你现在在做什么？')">在做什么</button>
-                    <button class="suggestion-btn" onclick="askQuestion('你能做什么？')">擅长方向</button>
-                    <button class="suggestion-btn" onclick="askQuestion('你参加过什么比赛？')">比赛经历</button>
-                </div>
-                <div class="chat-input-area">
-                    <input type="text" class="chat-input" id="chatInput"
-                           placeholder="输入你的问题..." onkeypress="if(event.key==='Enter') sendMessage()">
-                    <button class="chat-send" onclick="sendMessage()" title="发送">➤</button>
-                </div>
-                <div class="chat-footer">Built with <span>♥</span> by 尧嵘才's Digital Twin</div>
-            </div>
-        </div>
-
         <!-- ===== Tab: 关于 ===== -->
         <div class="tab-content active" id="tab-about">
             <!-- 手机端头像（电脑端隐藏） -->
@@ -5575,7 +5579,44 @@
 
         <!-- ===== Tab: 分身（手机端独立聊天Tab）===== -->
         <div class="tab-content" id="tab-chat">
-            <div class="section-label">Digital Twin</div>
+            <div class="chat-card" id="chatCard">
+                <div class="chat-header">
+                    <div class="header-avatar">
+                        <div class="peek-hair-sm">
+                            <div class="peek-ahoge-sm"></div>
+                        </div>
+                        <div class="peek-eye-sm left"></div>
+                        <div class="peek-eye-sm right"></div>
+                        <div class="peek-blush-sm left"></div>
+                        <div class="peek-blush-sm right"></div>
+                        <div class="peek-mouth-sm"></div>
+                    </div>
+                    <div class="chat-header-text">
+                        <h2>数字分身 Digital Twin</h2>
+                        <p>和尧嵘才聊聊</p>
+                    </div>
+                    <span class="status-dot">在线</span>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot">
+                        <div class="msg-avatar">尧</div>
+                        <div class="bubble">你好，我是尧嵘才的数字分身。可以问我关于我的研究方向、项目经历或兴趣爱好，有什么想了解的吗？</div>
+                    </div>
+                </div>
+                <div class="chat-divider"><span>试试问我</span></div>
+                <div class="chat-suggestions">
+                    <button class="suggestion-btn" onclick="askQuestion('你是谁？')">你是谁？</button>
+                    <button class="suggestion-btn" onclick="askQuestion('你现在在做什么？')">在做什么</button>
+                    <button class="suggestion-btn" onclick="askQuestion('你能做什么？')">擅长方向</button>
+                    <button class="suggestion-btn" onclick="askQuestion('你参加过什么比赛？')">比赛经历</button>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" class="chat-input" id="chatInput"
+                           placeholder="输入你的问题..." onkeypress="if(event.key==='Enter') sendMessage()">
+                    <button class="chat-send" onclick="sendMessage()" title="发送">➤</button>
+                </div>
+                <div class="chat-footer">Built with <span>♥</span> by 尧嵘才's Digital Twin</div>
+            </div>
         </div>
 
     </div>

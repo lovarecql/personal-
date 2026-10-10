@@ -1,0 +1,11 @@
+.vercel
+.env*
+node_modules/
+*.docx
+*.zip
+_*.txt
+_*.ps1
+_*.html
+.trae-html-share-packages/
+package-lock.json
+package.json

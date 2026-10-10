@@ -4850,6 +4850,194 @@
             .journey-nav {
                 flex-wrap: wrap;
             }
+
+            /* ===== 手机端侧边头像改为顶部内联 ===== */
+            .side-profile {
+                position: relative !important;
+                top: auto !important;
+                left: auto !important;
+                width: 100%;
+                text-align: center;
+                margin-bottom: 20px;
+                transform: none !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+            }
+            .side-profile .avatar {
+                margin: 0 auto;
+            }
+            .side-profile h1,
+            .side-profile .title,
+            .side-profile .tags {
+                text-align: center;
+            }
+            .side-profile .tags {
+                justify-content: center;
+            }
+
+            /* ===== 星球宇宙手机端缩小 ===== */
+            .universe {
+                height: 440px;
+            }
+
+            /* ===== 聊天框手机端全宽 ===== */
+            .chat-card {
+                position: fixed !important;
+                right: 0 !important;
+                left: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                border-radius: 20px 20px 0 0;
+            }
+
+            /* ===== 机器人手机端位置 ===== */
+            .robot-floating {
+                bottom: calc(85vh - 40px) !important;
+                right: calc(50% - 28px) !important;
+            }
+
+            /* ===== 导航栏手机端紧凑 ===== */
+            .top-nav-inner {
+                padding: 0 12px;
+            }
+            .top-nav-links {
+                gap: 10px;
+                font-size: 13px;
+            }
+            .top-nav-brand {
+                display: none;
+            }
+
+            /* ===== 页面容器手机端 ===== */
+            .page {
+                padding: 20px 14px 30px;
+            }
+
+            /* ===== 信息卡片手机端 ===== */
+            .info-card,
+            .project-card,
+            .skill-card,
+            .edu-card,
+            .paper-card {
+                padding: 16px 16px;
+                border-radius: 14px;
+            }
+
+            /* ===== 标题手机端 ===== */
+            .section-label {
+                font-size: 11px;
+                letter-spacing: 1.5px;
+            }
+
+            /* ===== 访客计数器手机端 ===== */
+            .visitor-counter {
+                font-size: 11px;
+                padding: 4px 10px;
+                bottom: 14px;
+                left: 12px;
+            }
+
+            /* ===== 音乐播放器手机端 ===== */
+            .music-player {
+                padding: 14px;
+                gap: 12px;
+            }
+            .music-cover {
+                width: 56px !important;
+                height: 56px !important;
+            }
+            .music-info {
+                min-width: 0;
+            }
+            .music-title {
+                font-size: 14px;
+            }
+
+            /* ===== 成就墙手机端 ===== */
+            .achievement-wall {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            .achievement-badge {
+                padding: 12px 8px;
+            }
+
+            /* ===== 照片墙手机端 ===== */
+            .photo-wall {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            /* ===== 时间线手机端 ===== */
+            .timeline-item {
+                padding-left: 20px;
+            }
+            .timeline-item::before {
+                left: 0;
+            }
+
+            /* ===== 星球详情弹窗手机端 ===== */
+            .planet-detail-overlay {
+                padding: 16px;
+            }
+            .planet-detail-card {
+                width: 100% !important;
+                max-width: 100% !important;
+                max-height: 80vh;
+                overflow-y: auto;
+                border-radius: 16px;
+            }
+        }
+
+        /* ===== 超小屏幕（≤480px）细粒度适配 ===== */
+        @media (max-width: 480px) {
+            .profile h1 {
+                font-size: 24px;
+            }
+            .profile .title {
+                font-size: 12px;
+            }
+            .tags .tag {
+                font-size: 11px;
+                padding: 3px 10px;
+            }
+            .universe {
+                height: 380px;
+            }
+            .planet-body {
+                transform: scale(0.75);
+            }
+            .planet-ring {
+                transform: translate(-50%, -50%) rotateX(70deg) scale(0.75);
+            }
+            .planet-label {
+                font-size: 9px;
+            }
+            .info-list li {
+                font-size: 13px;
+            }
+            .skill-tag {
+                font-size: 11px;
+                padding: 3px 8px;
+            }
+            .bubble {
+                font-size: 13px;
+                max-width: 85%;
+            }
+            .chat-header h2 {
+                font-size: 16px;
+            }
+            .top-nav-links a {
+                font-size: 12px;
+            }
+            .toolbox-grid {
+                grid-template-columns: 1fr;
+            }
+            .music-controls button {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>

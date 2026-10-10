@@ -4851,28 +4851,9 @@
                 flex-wrap: wrap;
             }
 
-            /* ===== 手机端侧边头像改为顶部内联 ===== */
+            /* ===== 手机端侧边头像隐藏（内容已在关于Tab里） ===== */
             .side-profile {
-                position: relative !important;
-                top: auto !important;
-                left: auto !important;
-                width: 100%;
-                text-align: center;
-                margin-bottom: 20px;
-                transform: none !important;
-                opacity: 1 !important;
-                pointer-events: auto !important;
-            }
-            .side-profile .avatar {
-                margin: 0 auto;
-            }
-            .side-profile h1,
-            .side-profile .title,
-            .side-profile .tags {
-                text-align: center;
-            }
-            .side-profile .tags {
-                justify-content: center;
+                display: none !important;
             }
 
             /* ===== 星球宇宙手机端缩小 ===== */
@@ -4880,28 +4861,51 @@
                 height: 440px;
             }
 
-            /* ===== 聊天框手机端全宽 ===== */
+            /* ===== 聊天框手机端：做成独立Tab内容 ===== */
             .chat-card {
-                position: fixed !important;
-                right: 0 !important;
-                left: 0 !important;
+                position: relative !important;
                 width: 100% !important;
                 max-width: 100% !important;
-                border-radius: 20px 20px 0 0;
+                max-height: none !important;
+                min-height: 500px;
+                transform: none !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+                border-radius: 16px;
+                box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
             }
 
-            /* ===== 机器人手机端位置 ===== */
+            /* ===== 机器人手机端隐藏 ===== */
             .robot-floating {
-                bottom: calc(85vh - 40px) !important;
-                right: calc(50% - 28px) !important;
+                display: none !important;
+            }
+
+            /* ===== 手机端分身Tab显示 ===== */
+            .nav-tab[data-tab="chat"] {
+                display: inline-block !important;
             }
 
             /* ===== 导航栏手机端紧凑 ===== */
             .top-nav-inner {
-                padding: 0 12px;
+                padding: 0 10px;
+                flex-wrap: nowrap !important;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
             }
             .top-nav-links {
-                gap: 10px;
+                gap: 14px;
+                font-size: 13px;
+                flex-wrap: nowrap !important;
+                white-space: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .top-nav-links::-webkit-scrollbar {
+                display: none;
+            }
+            .top-nav-links a {
+                flex-shrink: 0;
                 font-size: 13px;
             }
             .top-nav-brand {
@@ -4911,6 +4915,11 @@
             /* ===== 页面容器手机端 ===== */
             .page {
                 padding: 20px 14px 30px;
+            }
+
+            /* ===== layout 手机端 ===== */
+            .layout {
+                padding-top: 70px !important;
             }
 
             /* ===== 信息卡片手机端 ===== */
@@ -5030,6 +5039,9 @@
             .top-nav-links a {
                 font-size: 12px;
             }
+            .top-nav-links {
+                gap: 10px;
+            }
             .toolbox-grid {
                 grid-template-columns: 1fr;
             }
@@ -5064,6 +5076,7 @@
                 <a href="#projects" class="nav-tab" data-tab="projects">项目</a>
                 <a href="#highlights" class="nav-tab" data-tab="highlights">经历</a>
                 <a href="#more" class="nav-tab" data-tab="more">更多</a>
+                <a href="#chat" class="nav-tab nav-tab-chat" data-tab="chat" style="display:none;">分身</a>
             </div>
             <button class="theme-toggle" id="themeToggle" title="切换主题">🌙</button>
         </div>
@@ -5472,6 +5485,13 @@
             <div class="footer-copy">© 2026 尧嵘才</div>
         </div>
         </div>
+
+        <!-- ===== Tab: 分身（手机端独立聊天Tab）===== -->
+        <div class="tab-content" id="tab-chat">
+            <div class="section-label">Digital Twin</div>
+        </div>
+
+    </div>
     </div>
 
     <!-- 小宠物机器人（固定右下角） -->
@@ -6010,6 +6030,17 @@
                     }, 8000);
                 }, 4000);
             }, 1200);
+        })();
+
+        // ===== 手机端：把聊天框移入分身Tab =====
+        (function() {
+            if (window.innerWidth <= 900) {
+                const chatCard = document.getElementById('chatCard');
+                const tabChat = document.getElementById('tab-chat');
+                if (chatCard && tabChat) {
+                    tabChat.appendChild(chatCard);
+                }
+            }
         })();
 
         // ===== Tab 切换 =====

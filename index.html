@@ -4935,19 +4935,27 @@
             /* ===== 聊天框手机端：独立Tab，全屏完整显示 ===== */
             .chat-card {
                 position: relative !important;
+                top: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+                left: auto !important;
                 width: 100% !important;
                 max-width: 100% !important;
+                min-width: 0 !important;
                 max-height: none !important;
-                height: calc(100vh - 140px);
-                min-height: 500px;
+                height: calc(100vh - 140px) !important;
+                min-height: 500px !important;
                 transform: none !important;
                 opacity: 1 !important;
                 pointer-events: auto !important;
-                border-radius: 16px;
-                box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
-                display: flex;
-                flex-direction: column;
-                overflow: hidden;
+                border-radius: 16px !important;
+                box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08) !important;
+                display: flex !important;
+                flex-direction: column !important;
+                overflow: hidden !important;
+                z-index: 1 !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
 
             /* 聊天框顶部小把手去掉（Tab模式不需要） */

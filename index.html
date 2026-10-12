@@ -256,10 +256,18 @@
             transition: color 0.2s;
             font-weight: 500;
             padding: 4px 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .top-nav-links a:hover {
             color: var(--blue);
+        }
+
+        /* 桌面端隐藏图标，只显示文字 */
+        .nav-icon {
+            display: none;
         }
 
         /* ===== 整体布局 ===== */
@@ -4904,7 +4912,7 @@
                 border-radius: 14px;
                 max-width: 85%;
             }
-            .chat-input-wrap {
+            .chat-input-area {
                 padding: 10px 12px;
                 gap: 8px;
             }
@@ -4932,14 +4940,17 @@
                 height: 440px;
             }
 
-            /* ===== 聊天框手机端：独立Tab，全屏完整显示 ===== */
+            /* ===== 聊天框手机端：独立Tab，全屏完整显示，左右对称 ===== */
+            #tab-chat {
+                padding: 0 !important;
+            }
             .chat-card {
                 position: relative !important;
                 width: 100% !important;
                 max-width: 100% !important;
                 max-height: none !important;
-                height: calc(100vh - 140px);
-                min-height: 500px;
+                height: calc(100vh - 64px - 130px) !important;
+                min-height: 420px;
                 transform: none !important;
                 opacity: 1 !important;
                 pointer-events: auto !important;
@@ -4948,6 +4959,7 @@
                 display: flex;
                 flex-direction: column;
                 overflow: hidden;
+                margin: 0 auto;
             }
 
             /* 聊天框顶部小把手去掉（Tab模式不需要） */
@@ -4962,6 +4974,35 @@
                 -webkit-overflow-scrolling: touch;
                 max-height: none !important;
                 min-height: 0;
+                padding: 16px 14px;
+            }
+
+            /* 聊天气泡对称优化 */
+            .message {
+                width: 100%;
+                padding: 0;
+            }
+            .message.bot {
+                justify-content: flex-start;
+            }
+            .message.user {
+                justify-content: flex-end;
+            }
+            .bubble {
+                max-width: 80%;
+                word-break: break-word;
+            }
+            .message.bot .bubble {
+                border-top-left-radius: 4px;
+                border-top-right-radius: 14px;
+                border-bottom-left-radius: 14px;
+                border-bottom-right-radius: 14px;
+            }
+            .message.user .bubble {
+                border-top-left-radius: 14px;
+                border-top-right-radius: 4px;
+                border-bottom-left-radius: 14px;
+                border-bottom-right-radius: 14px;
             }
 
             /* 聊天建议按钮区固定 */
@@ -4969,22 +5010,10 @@
                 flex-shrink: 0;
             }
 
-            /* 聊天输入区固定在底部 */
+            /* 聊天输入区固定在底部，左右对称 */
             .chat-input-area {
                 flex-shrink: 0;
-            }
-
-            /* 聊天气泡对称优化 */
-            .message.bot .bubble {
-                border-top-left-radius: 14px;
-            }
-            .message.user .bubble {
-                border-top-right-radius: 14px;
-            }
-
-            /* 关闭按钮在Tab模式下隐藏 */
-            .chat-close {
-                display: none !important;
+                padding: 12px 14px;
             }
 
             /* ===== 机器人手机端隐藏 ===== */
@@ -4994,49 +5023,102 @@
 
             /* ===== 手机端分身Tab显示 ===== */
             .nav-tab[data-tab="chat"] {
-                display: inline-block !important;
+                display: flex !important;
             }
 
-            /* ===== 导航栏手机端紧凑 ===== */
+            /* ===== 手机端底部导航栏 ===== */
+            .top-nav {
+                top: auto;
+                bottom: 0;
+                height: auto;
+                border-top: 1.5px solid rgba(255, 255, 255, 0.9);
+                border-bottom: none;
+                box-shadow: 0 -2px 20px rgba(15, 23, 42, 0.08);
+                transform: translateY(0) !important;
+            }
+            .top-nav.nav-hidden {
+                transform: translateY(0) !important;
+            }
+            .top-nav.nav-scrolled {
+                box-shadow: 0 -2px 20px rgba(15, 23, 42, 0.08);
+            }
             .top-nav-inner {
-                padding: 0 10px;
+                padding: 0;
                 flex-wrap: nowrap !important;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
+                overflow-x: hidden;
                 width: 100%;
+                max-width: 100%;
+                height: 64px;
+            }
+            .top-nav-brand {
+                display: none !important;
+            }
+            .theme-toggle {
+                display: none !important;
             }
             .top-nav-links {
-                gap: 14px;
-                font-size: 13px;
-                flex-wrap: nowrap !important;
-                white-space: nowrap;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-                flex: 1;
-                min-width: 0;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                gap: 0;
+                width: 100%;
+                overflow-x: visible;
+                flex-wrap: nowrap;
             }
             .top-nav-links::-webkit-scrollbar {
                 display: none;
             }
             .top-nav-links a {
-                flex-shrink: 0;
-                font-size: 13px;
+                flex: 1;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 2px;
+                padding: 8px 0;
+                font-size: 10px;
+                font-weight: 500;
                 white-space: nowrap;
-                display: inline-block;
+                color: var(--text-muted);
+                position: relative;
+                transition: color 0.2s ease, transform 0.15s ease;
             }
-            .top-nav-brand {
+            .top-nav-links a:active {
+                transform: scale(0.92);
+            }
+            /* 显示图标 */
+            .nav-icon {
+                display: block;
+                font-size: 20px;
+                line-height: 1;
+                margin-bottom: 2px;
+                filter: grayscale(0.3);
+                transition: filter 0.2s;
+            }
+            .top-nav-links a.active {
+                color: var(--blue);
+                font-weight: 600;
+            }
+            .top-nav-links a.active .nav-icon {
+                filter: grayscale(0);
+                transform: scale(1.1);
+            }
+            /* 去掉原来的下划线指示器 */
+            .top-nav-links a::after {
                 display: none;
+            }
+            .top-nav-links a.active::after {
+                display: none;
+            }
+
+            /* ===== layout 手机端：底部导航高度 ===== */
+            .layout {
+                padding-top: 24px !important;
+                padding-bottom: 80px !important;
             }
 
             /* ===== 页面容器手机端 ===== */
             .page {
                 padding: 20px 14px 30px;
-            }
-
-            /* ===== layout 手机端 ===== */
-            .layout {
-                padding-top: 70px !important;
             }
 
             /* ===== 信息卡片手机端 ===== */
@@ -5059,8 +5141,19 @@
             .visitor-counter {
                 font-size: 11px;
                 padding: 0;
-                bottom: 14px;
-                left: 12px;
+                bottom: 78px;
+                right: 14px;
+                left: auto;
+            }
+
+            /* 暗色模式底部导航适配 */
+            body.dark .top-nav {
+                background: rgba(15, 23, 42, 0.85);
+                border-top-color: rgba(148, 163, 184, 0.15);
+                border-bottom-color: transparent;
+            }
+            body.dark .top-nav-inner {
+                border-top-color: rgba(148, 163, 184, 0.08);
             }
 
             /* ===== 音乐播放器手机端 ===== */
@@ -5148,16 +5241,22 @@
             }
             .bubble {
                 font-size: 13px;
-                max-width: 85%;
+                max-width: 75%;
             }
             .chat-header h2 {
                 font-size: 16px;
             }
             .top-nav-links a {
-                font-size: 12px;
+                font-size: 10px;
             }
             .top-nav-links {
-                gap: 10px;
+                gap: 0;
+            }
+            .nav-icon {
+                font-size: 18px;
+            }
+            .chat-card {
+                height: calc(100vh - 64px - 120px) !important;
             }
             .toolbox-grid {
                 grid-template-columns: 1fr;
@@ -5383,56 +5482,6 @@
             50% { opacity: 0.8; }
             100% { transform: translateX(-300%); opacity: 0; }
         }
-        /* 底部装饰条 */
-        .intro-bottom-bar {
-            display: none;
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 56px;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 3;
-        }
-        .intro-bottom-bar::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg,
-                transparent 0%,
-                var(--blue) 20%,
-                var(--purple) 50%,
-                var(--blue) 80%,
-                transparent 100%);
-            background-size: 200% 100%;
-            animation: barShift 2s ease-in-out infinite;
-        }
-        @keyframes barShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        .intro-bottom-bar .bar-dots {
-            display: flex;
-            gap: 8px;
-            margin-top: 14px;
-        }
-        .intro-bottom-bar .bar-dots span {
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            background: var(--blue);
-            opacity: 0;
-            animation: dotBlink 1.2s ease-in-out infinite;
-        }
-        .intro-bottom-bar .bar-dots span:nth-child(1) { background: var(--blue); animation-delay: 0s; }
-        .intro-bottom-bar .bar-dots span:nth-child(2) { background: var(--purple); animation-delay: 0.2s; }
-        .intro-bottom-bar .bar-dots span:nth-child(3) { background: var(--blue); animation-delay: 0.4s; }
-        .intro-bottom-bar .bar-dots span:nth-child(4) { background: var(--purple); animation-delay: 0.6s; }
-        .intro-bottom-bar .bar-dots span:nth-child(5) { background: var(--blue); animation-delay: 0.8s; }
-        @keyframes dotBlink {
-            0%, 100% { opacity: 0.2; transform: scale(0.7); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
         .intro-sub {
             position: absolute;
             bottom: 25%;
@@ -5448,40 +5497,8 @@
             100% { opacity: 0.7; transform: translateY(0); }
         }
         @media (max-width: 768px) {
-            .intro-text-wrap {
-                height: 260px;
-            }
-            .intro-text {
-                font-size: 19vw;
-                letter-spacing: 3px;
-                -webkit-text-stroke: 1.5px rgba(139,92,246,0.2);
-                filter: drop-shadow(0 8px 35px rgba(43,156,230,0.5))
-                        drop-shadow(0 0 70px rgba(139,92,246,0.3));
-            }
-            #intro1 {
-                font-size: 17vw;
-                -webkit-text-stroke: 1.5px rgba(43,156,230,0.25);
-            }
-            #intro2 {
-                font-size: 17vw;
-                -webkit-text-stroke: 1.5px rgba(139,92,246,0.25);
-            }
-            #intro3 {
-                font-size: 23vw;
-                letter-spacing: 6px;
-                -webkit-text-stroke: 2px rgba(139,92,246,0.3);
-                filter: drop-shadow(0 10px 45px rgba(43,156,230,0.6))
-                        drop-shadow(0 0 90px rgba(139,92,246,0.4));
-            }
-            /* 底部装饰条 */
-            .intro-bottom-bar {
-                display: flex !important;
-            }
-            .intro-sub {
-                font-size: 13px;
-                letter-spacing: 3px;
-                bottom: 48px;
-            }
+            .intro-text { font-size: 14vw; }
+            .intro-sub { font-size: 12px; letter-spacing: 2px; bottom: 20%; }
         }
         /* 暗色模式开场转场适配 */
         body.dark .intro-overlay {
@@ -5536,34 +5553,6 @@
         body.dark .intro-ring {
             border-color: #60A5FA;
         }
-        body.dark .intro-bottom-bar::before {
-            background: linear-gradient(90deg,
-                transparent 0%,
-                #60A5FA 20%,
-                #A78BFA 50%,
-                #60A5FA 80%,
-                transparent 100%);
-            background-size: 200% 100%;
-        }
-        body.dark .intro-bottom-bar .bar-dots span:nth-child(1),
-        body.dark .intro-bottom-bar .bar-dots span:nth-child(3),
-        body.dark .intro-bottom-bar .bar-dots span:nth-child(5) {
-            background: #60A5FA;
-        }
-        body.dark .intro-bottom-bar .bar-dots span:nth-child(2),
-        body.dark .intro-bottom-bar .bar-dots span:nth-child(4) {
-            background: #A78BFA;
-        }
-        /* 暗色模式手机端文字加强 */
-        @media (max-width: 768px) {
-            body.dark #intro1 { -webkit-text-stroke: 1.5px rgba(96,165,250,0.3); }
-            body.dark #intro2 { -webkit-text-stroke: 1.5px rgba(167,139,250,0.3); }
-            body.dark #intro3 {
-                -webkit-text-stroke: 2px rgba(167,139,250,0.35);
-                filter: drop-shadow(0 10px 50px rgba(96,165,250,0.7))
-                        drop-shadow(0 0 100px rgba(167,139,250,0.5));
-            }
-        }
     </style>
 </head>
 <body>
@@ -5587,11 +5576,6 @@
             <span class="intro-text" id="intro2" data-text="我是">我是</span>
             <span class="intro-text" id="intro3" data-text="尧嵘才">尧嵘才</span>
         </div>
-        <div class="intro-bottom-bar">
-            <div class="bar-dots">
-                <span></span><span></span><span></span><span></span><span></span>
-            </div>
-        </div>
         <div class="intro-sub">YRC · 上海师大计科</div>
     </div>
 
@@ -5612,12 +5596,24 @@
                 <span>尧嵘才</span>
             </div>
             <div class="top-nav-links">
-                <a href="#about" class="nav-tab active" data-tab="about">关于</a>
-                <a href="#skills" class="nav-tab" data-tab="skills">技能</a>
-                <a href="#projects" class="nav-tab" data-tab="projects">项目</a>
-                <a href="#highlights" class="nav-tab" data-tab="highlights">经历</a>
-                <a href="#more" class="nav-tab" data-tab="more">更多</a>
-                <a href="#chat" class="nav-tab nav-tab-chat" data-tab="chat" style="display:none;">分身</a>
+                <a href="#about" class="nav-tab active" data-tab="about">
+                    <span class="nav-icon">👤</span><span class="nav-label">关于</span>
+                </a>
+                <a href="#skills" class="nav-tab" data-tab="skills">
+                    <span class="nav-icon">💻</span><span class="nav-label">技能</span>
+                </a>
+                <a href="#projects" class="nav-tab" data-tab="projects">
+                    <span class="nav-icon">🚀</span><span class="nav-label">项目</span>
+                </a>
+                <a href="#highlights" class="nav-tab" data-tab="highlights">
+                    <span class="nav-icon">🏆</span><span class="nav-label">经历</span>
+                </a>
+                <a href="#more" class="nav-tab" data-tab="more">
+                    <span class="nav-icon">✨</span><span class="nav-label">更多</span>
+                </a>
+                <a href="#chat" class="nav-tab nav-tab-chat" data-tab="chat" style="display:none;">
+                    <span class="nav-icon">💬</span><span class="nav-label">分身</span>
+                </a>
             </div>
             <button class="theme-toggle" id="themeToggle" title="切换主题">🌙</button>
         </div>
@@ -5989,18 +5985,6 @@
         </div>
         </div>
 
-        <!-- ===== Footer ===== -->
-        <div class="footer fade-in delay-5">
-            <div class="footer-links">
-                <a href="mailto:example@email.com">Email</a>
-                <a href="#" target="_blank">GitHub</a>
-                <a href="#" target="_blank">知乎</a>
-                <a href="#" target="_blank">微信</a>
-            </div>
-            <div class="footer-copy">© 2026 尧嵘才</div>
-        </div>
-        </div>
-
         <!-- ===== Tab: 分身（手机端独立聊天Tab）===== -->
         <div class="tab-content" id="tab-chat">
             <div class="chat-card" id="chatCard">
@@ -6041,6 +6025,18 @@
                 </div>
                 <div class="chat-footer">Built with <span>♥</span> by 尧嵘才's Digital Twin</div>
             </div>
+        </div>
+
+        <!-- ===== Footer ===== -->
+        <div class="footer fade-in delay-5">
+            <div class="footer-links">
+                <a href="mailto:example@email.com">Email</a>
+                <a href="#" target="_blank">GitHub</a>
+                <a href="#" target="_blank">知乎</a>
+                <a href="#" target="_blank">微信</a>
+            </div>
+            <div class="footer-copy">© 2026 尧嵘才</div>
+        </div>
         </div>
 
     </div>

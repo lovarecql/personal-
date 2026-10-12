@@ -2,6 +2,7 @@
 .env*
 node_modules/
 *.docx
+*.pdf
 *.zip
 _*.txt
 _*.ps1

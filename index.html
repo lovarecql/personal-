@@ -4935,27 +4935,19 @@
             /* ===== 聊天框手机端：独立Tab，全屏完整显示 ===== */
             .chat-card {
                 position: relative !important;
-                top: auto !important;
-                right: auto !important;
-                bottom: auto !important;
-                left: auto !important;
                 width: 100% !important;
                 max-width: 100% !important;
-                min-width: 0 !important;
                 max-height: none !important;
-                height: calc(100vh - 140px) !important;
-                min-height: 500px !important;
+                height: calc(100vh - 140px);
+                min-height: 500px;
                 transform: none !important;
                 opacity: 1 !important;
                 pointer-events: auto !important;
-                border-radius: 16px !important;
-                box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08) !important;
-                display: flex !important;
-                flex-direction: column !important;
-                overflow: hidden !important;
-                z-index: 1 !important;
-                margin: 0 !important;
-                padding: 0 !important;
+                border-radius: 16px;
+                box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
             }
 
             /* 聊天框顶部小把手去掉（Tab模式不需要） */
@@ -5176,9 +5168,318 @@
                 font-size: 14px;
             }
         }
+        /* ===== 开场转场层 ===== */
+        .intro-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--card);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: opacity 0.5s ease;
+        }
+        .intro-overlay.exit {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .intro-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse at 30% 40%, rgba(43,156,230,0.15), transparent 50%),
+                radial-gradient(ellipse at 70% 60%, rgba(139,92,246,0.12), transparent 50%);
+        }
+        .intro-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid var(--blue);
+            opacity: 0;
+            animation: ringExpand 1.5s ease-out forwards;
+        }
+        .intro-ring:nth-child(1) { width: 100px; height: 100px; animation-delay: 0s; }
+        .intro-ring:nth-child(2) { width: 100px; height: 100px; animation-delay: 0.2s; }
+        .intro-ring:nth-child(3) { width: 100px; height: 100px; animation-delay: 0.4s; }
+        @keyframes ringExpand {
+            0% { transform: scale(0.3); opacity: 0; border-color: var(--blue); }
+            50% { opacity: 0.6; }
+            100% { transform: scale(8); opacity: 0; border-color: var(--purple); }
+        }
+        .intro-text-wrap {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            line-height: 1.2;
+            perspective: 1200px;
+            width: 100%;
+            height: 200px;
+        }
+        /* 通用文字样式 */
+        .intro-text {
+            font-size: clamp(56px, 14vw, 160px);
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 30%, var(--blue) 60%, var(--purple) 100%);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke: 1px rgba(139,92,246,0.15);
+            filter: drop-shadow(0 6px 30px rgba(43,156,230,0.4))
+                    drop-shadow(0 0 60px rgba(139,92,246,0.2));
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+        }
+        /* 各字独立描边色 */
+        #intro1 { -webkit-text-stroke: 1px rgba(43,156,230,0.2); }
+        #intro2 { -webkit-text-stroke: 1px rgba(139,92,246,0.2); }
+        #intro3 {
+            -webkit-text-stroke: 1.5px rgba(139,92,246,0.25);
+            font-size: clamp(64px, 16vw, 180px);
+            letter-spacing: 4px;
+        }
+        /* 你好：左滑入 → 停留 → 右滑出（快速利落） */
+        #intro1.anim {
+            animation: wordSlideLR 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards,
+                       gradientShift 1.5s ease-in-out infinite;
+        }
+        /* 我是：放大模糊→清晰→溶解（中速） */
+        #intro2.anim {
+            animation: wordBlurDissolve 1.4s ease-in-out forwards,
+                       gradientShift 1.8s ease-in-out infinite;
+        }
+        /* 尧嵘才：3D翻转+弹跳+定格（慢速大气） */
+        #intro3.anim {
+            animation: wordGrand 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards,
+                       gradientShift 2s ease-in-out infinite,
+                       namePulse 2s ease-in-out 0.9s infinite;
+        }
+        /* 你好：左→右滑 */
+        @keyframes wordSlideLR {
+            0% {
+                transform: translate(-200%, -50%) skewX(-20deg);
+                opacity: 0; filter: blur(20px);
+            }
+            20% {
+                transform: translate(-50%, -50%) skewX(0deg);
+                opacity: 1; filter: blur(0);
+            }
+            65% {
+                transform: translate(-50%, -50%) skewX(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(200%, -50%) skewX(20deg);
+                opacity: 0; filter: blur(20px);
+            }
+        }
+        /* 我是：模糊放大→清晰→溶解 */
+        @keyframes wordBlurDissolve {
+            0% {
+                transform: translate(-50%, -50%) scale(3);
+                opacity: 0; filter: blur(30px);
+                -webkit-text-stroke-width: 0;
+            }
+            20% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1; filter: blur(0);
+                -webkit-text-stroke-width: 1.5px;
+            }
+            60% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1; filter: blur(0);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(0.4);
+                opacity: 0; filter: blur(25px);
+                -webkit-text-stroke-width: 0;
+            }
+        }
+        /* 尧嵘才：3D翻转弹跳定格 */
+        @keyframes wordGrand {
+            0% {
+                transform: translate(-50%, -50%) perspective(1000px) rotateX(-90deg) rotateY(45deg) scale(0.1);
+                opacity: 0;
+            }
+            40% {
+                transform: translate(-50%, -50%) perspective(1000px) rotateX(20deg) rotateY(-15deg) scale(1.3);
+                opacity: 1;
+            }
+            60% {
+                transform: translate(-50%, -50%) perspective(1000px) rotateX(-10deg) rotateY(8deg) scale(0.95);
+            }
+            80% {
+                transform: translate(-50%, -50%) perspective(1000px) rotateX(5deg) rotateY(-3deg) scale(1.03);
+            }
+            100% {
+                transform: translate(-50%, -50%) perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1);
+                opacity: 1;
+            }
+        }
+        /* 尧嵘才定格后持续脉冲 */
+        @keyframes namePulse {
+            0%, 100% { filter: drop-shadow(0 6px 30px rgba(43,156,230,0.4)) drop-shadow(0 0 60px rgba(139,92,246,0.2)); }
+            50% { filter: drop-shadow(0 8px 40px rgba(43,156,230,0.6)) drop-shadow(0 0 100px rgba(139,92,246,0.4)); }
+        }
+        /* 描边层 */
+        .intro-text::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0;
+            -webkit-text-stroke: 2px rgba(139,92,246,0.12);
+            -webkit-text-fill-color: transparent;
+            z-index: -1;
+        }
+        /* 模糊光晕层 */
+        .intro-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 6px; left: 6px;
+            color: rgba(139,92,246,0.15);
+            -webkit-text-fill-color: rgba(139,92,246,0.15);
+            z-index: -2;
+            filter: blur(10px);
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .intro-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            overflow: hidden;
+        }
+        .intro-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--blue), transparent);
+            opacity: 0;
+            animation: introSpeedLine 0.9s ease-out forwards;
+        }
+        .intro-line:nth-child(1) { top: 20%; width: 50%; left: -50%; animation-delay: 3.1s; }
+        .intro-line:nth-child(2) { top: 35%; width: 40%; left: -40%; animation-delay: 3.2s; }
+        .intro-line:nth-child(3) { top: 50%; width: 60%; left: -60%; animation-delay: 3.3s; }
+        .intro-line:nth-child(4) { top: 65%; width: 45%; left: -45%; animation-delay: 3.15s; }
+        .intro-line:nth-child(5) { top: 80%; width: 55%; left: -55%; animation-delay: 3.25s; }
+        .intro-line:nth-child(6) { top: 28%; width: 35%; right: -35%; left: auto;
+            background: linear-gradient(-90deg, transparent, var(--purple), transparent);
+            animation: introSpeedLineR 0.9s ease-out 3.3s forwards; }
+        .intro-line:nth-child(7) { top: 58%; width: 50%; right: -50%; left: auto;
+            background: linear-gradient(-90deg, transparent, var(--purple), transparent);
+            animation: introSpeedLineR 0.9s ease-out 3.4s forwards; }
+        @keyframes introSpeedLine {
+            0% { transform: translateX(0); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateX(300%); opacity: 0; }
+        }
+        @keyframes introSpeedLineR {
+            0% { transform: translateX(0); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateX(-300%); opacity: 0; }
+        }
+        .intro-sub {
+            position: absolute;
+            bottom: 25%;
+            color: var(--text-sub);
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            opacity: 0;
+            animation: introSubIn 0.6s ease-out 3.5s forwards;
+        }
+        @keyframes introSubIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 0.7; transform: translateY(0); }
+        }
+        @media (max-width: 768px) {
+            .intro-text { font-size: 14vw; }
+            .intro-sub { font-size: 12px; letter-spacing: 2px; bottom: 20%; }
+        }
+        /* 暗色模式开场转场适配 */
+        body.dark .intro-overlay {
+            background: #0F172A;
+        }
+        body.dark .intro-bg {
+            background:
+                radial-gradient(ellipse at 30% 40%, rgba(43,156,230,0.25), transparent 50%),
+                radial-gradient(ellipse at 70% 60%, rgba(139,92,246,0.2), transparent 50%);
+        }
+        body.dark .intro-text {
+            background: linear-gradient(135deg, #60A5FA 0%, #A78BFA 30%, #60A5FA 60%, #C4B5FD 100%);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke: 1px rgba(167,139,250,0.2);
+            filter: drop-shadow(0 6px 40px rgba(96,165,250,0.5))
+                    drop-shadow(0 0 80px rgba(167,139,250,0.3));
+        }
+        body.dark #intro1 { -webkit-text-stroke: 1px rgba(96,165,250,0.25); }
+        body.dark #intro2 { -webkit-text-stroke: 1px rgba(167,139,250,0.25); }
+        body.dark #intro3 {
+            -webkit-text-stroke: 1.5px rgba(167,139,250,0.3);
+        }
+        body.dark #intro3.anim {
+            animation: wordGrand 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards,
+                       gradientShift 2s ease-in-out infinite,
+                       namePulseDark 2s ease-in-out 0.9s infinite;
+        }
+        @keyframes namePulseDark {
+            0%, 100% { filter: drop-shadow(0 6px 40px rgba(96,165,250,0.5)) drop-shadow(0 0 80px rgba(167,139,250,0.3)); }
+            50% { filter: drop-shadow(0 10px 50px rgba(96,165,250,0.7)) drop-shadow(0 0 120px rgba(167,139,250,0.5)); }
+        }
+        body.dark .intro-text::before {
+            -webkit-text-stroke: 2px rgba(167,139,250,0.15);
+        }
+        body.dark .intro-text::after {
+            -webkit-text-fill-color: rgba(167,139,250,0.25);
+            color: rgba(167,139,250,0.25);
+        }
+        body.dark .intro-sub {
+            color: #94A3B8;
+        }
+        body.dark .intro-line {
+            background: linear-gradient(90deg, transparent, #60A5FA, transparent);
+        }
+        body.dark .intro-line:nth-child(6),
+        body.dark .intro-line:nth-child(7) {
+            background: linear-gradient(-90deg, transparent, #A78BFA, transparent);
+        }
+        body.dark .intro-ring {
+            border-color: #60A5FA;
+        }
     </style>
 </head>
 <body>
+    <!-- 开场转场 -->
+    <div class="intro-overlay" id="introOverlay">
+        <div class="intro-bg"></div>
+        <div class="intro-lines">
+            <div class="intro-line"></div>
+            <div class="intro-line"></div>
+            <div class="intro-line"></div>
+            <div class="intro-line"></div>
+            <div class="intro-line"></div>
+            <div class="intro-line"></div>
+            <div class="intro-line"></div>
+        </div>
+        <div class="intro-ring"></div>
+        <div class="intro-ring"></div>
+        <div class="intro-ring"></div>
+        <div class="intro-text-wrap">
+            <span class="intro-text" id="intro1" data-text="你好">你好</span>
+            <span class="intro-text" id="intro2" data-text="我是">我是</span>
+            <span class="intro-text" id="intro3" data-text="尧嵘才">尧嵘才</span>
+        </div>
+        <div class="intro-sub">YRC · 上海师大计科</div>
+    </div>
+
     <!-- 扫描线效果（仅暗色） -->
     <div class="scanlines" id="scanlines" style="display:none;"></div>
     <!-- 液态光斑背景 -->
@@ -5573,6 +5874,18 @@
         </div>
         </div>
 
+        <!-- ===== Footer ===== -->
+        <div class="footer fade-in delay-5">
+            <div class="footer-links">
+                <a href="mailto:example@email.com">Email</a>
+                <a href="#" target="_blank">GitHub</a>
+                <a href="#" target="_blank">知乎</a>
+                <a href="#" target="_blank">微信</a>
+            </div>
+            <div class="footer-copy">© 2026 尧嵘才</div>
+        </div>
+        </div>
+
         <!-- ===== Tab: 分身（手机端独立聊天Tab）===== -->
         <div class="tab-content" id="tab-chat">
             <div class="chat-card" id="chatCard">
@@ -5613,18 +5926,6 @@
                 </div>
                 <div class="chat-footer">Built with <span>♥</span> by 尧嵘才's Digital Twin</div>
             </div>
-        </div>
-
-        <!-- ===== Footer ===== -->
-        <div class="footer fade-in delay-5">
-            <div class="footer-links">
-                <a href="mailto:example@email.com">Email</a>
-                <a href="#" target="_blank">GitHub</a>
-                <a href="#" target="_blank">知乎</a>
-                <a href="#" target="_blank">微信</a>
-            </div>
-            <div class="footer-copy">© 2026 尧嵘才</div>
-        </div>
         </div>
 
     </div>
@@ -6492,6 +6793,31 @@
         // 页面加载完成后初始化
         window.addEventListener('load', function() {
             initRevealAnimations();
+
+            // 开场转场动画 - 三种不同风格依次出现消失
+            var introOverlay = document.getElementById('introOverlay');
+            if (introOverlay) {
+                var t1 = document.getElementById('intro1'); // 你好: 左滑→右滑 1.0s
+                var t2 = document.getElementById('intro2'); // 我是: 模糊溶解 1.4s
+                var t3 = document.getElementById('intro3'); // 尧嵘才: 3D翻转定格
+
+                // 0.3s: 你好 出现→消失（1.0s动画）
+                setTimeout(function() { if (t1) t1.classList.add('anim'); }, 300);
+                // 1.5s: 我是 出现→消失（1.4s动画）
+                setTimeout(function() { if (t2) t2.classList.add('anim'); }, 1500);
+                // 3.1s: 尧嵘才 出现并停留
+                setTimeout(function() { if (t3) t3.classList.add('anim'); }, 3100);
+                // 4.5s: 淡出
+                setTimeout(function() {
+                    introOverlay.classList.add('exit');
+                }, 4500);
+                // 5s: 移除
+                setTimeout(function() {
+                    if (introOverlay.parentNode) {
+                        introOverlay.parentNode.removeChild(introOverlay);
+                    }
+                }, 5000);
+            }
         });
 
         // 光斑漂浮动画（JS驱动确保兼容）

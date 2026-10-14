@@ -3600,6 +3600,74 @@
             background: var(--blue-dark);
         }
 
+        /* ===== 微信二维码弹窗 ===== */
+        .wechat-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .wechat-modal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .wechat-modal-content {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 28px 24px;
+            max-width: 320px;
+            width: 85%;
+            text-align: center;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            border: 1px solid var(--border);
+        }
+        .wechat-modal.show .wechat-modal-content {
+            transform: scale(1);
+        }
+        .wechat-modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 16px;
+        }
+        .wechat-qr-img {
+            width: 100%;
+            max-width: 240px;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+            margin: 0 auto;
+        }
+        .wechat-modal-tip {
+            font-size: 13px;
+            color: var(--text-sub);
+            margin: 14px 0 18px;
+        }
+        .wechat-modal-close {
+            padding: 8px 32px;
+            background: var(--blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .wechat-modal-close:hover {
+            background: var(--blue-dark);
+        }
+
         /* ===== Journey · 成长时间线 ===== */
         .journey-card {
             overflow: hidden;
@@ -6102,7 +6170,7 @@
                 <a href="mailto:example@email.com">Email</a>
                 <a href="#" target="_blank">GitHub</a>
                 <a href="#" target="_blank">知乎</a>
-                <a href="#" target="_blank">微信</a>
+                <a href="#" target="_blank" onclick="showWechatQR();return false;">微信</a>
             </div>
             <div class="footer-copy">© 2026 尧嵘才</div>
         </div>
@@ -6146,6 +6214,16 @@
             <div class="achievement-modal-title" id="modalTitle">标题</div>
             <div class="achievement-modal-desc" id="modalDesc">描述</div>
             <button class="achievement-modal-close" id="modalClose">知道了</button>
+        </div>
+    </div>
+
+    <!-- 微信二维码弹窗 -->
+    <div class="wechat-modal" id="wechatModal" onclick="hideWechatQR()">
+        <div class="wechat-modal-content" onclick="event.stopPropagation()">
+            <div class="wechat-modal-title">扫码加我微信</div>
+            <img src="wechat-qr.jpg" alt="微信二维码" class="wechat-qr-img">
+            <div class="wechat-modal-tip">Lovare · 中国大陆 上海</div>
+            <button class="wechat-modal-close" onclick="hideWechatQR()">关闭</button>
         </div>
     </div>
 
@@ -7861,6 +7939,17 @@ Python（主力）、PyTorch、OpenCV、Java、C/C++、HTML/CSS/JS、LaTeX、Git
                 if (e.key === 'Escape') closeModal();
             });
         })();
+
+        // ===== 微信二维码弹窗 =====
+        function showWechatQR() {
+            document.getElementById('wechatModal').classList.add('show');
+        }
+        function hideWechatQR() {
+            document.getElementById('wechatModal').classList.remove('show');
+        }
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') hideWechatQR();
+        });
 
         // ===== 成长时间线 =====
         (function() {
